@@ -3,32 +3,27 @@
 class Click2Call {
     private $host = '127.0.0.1';
     private $port = 5038;
-    private $username = 'admin';  // Change this to your AMI username
-    private $password = 'adminpass';  // Change this to your AMI password
-    private $extension = '1000';  // Change this to the extension that will initiate the call
-
-    public function __construct() {
-        // Ensure the Asterisk Manager Interface (AMI) credentials are set correctly
-    }
+    private $username = 'admin';  // Update with your AMI username
+    private $password = 'adminpass';  // Update with your AMI password
+    private $extension = '1000';  // Update with the correct FreePBX extension
 
     public function makeCall($number) {
         if (!$this->validateNumber($number)) {
-            die("Invalid number format.");
+            return "Invalid number format.";
         }
 
         $fp = fsockopen($this->host, $this->port, $errno, $errstr, 30);
         if (!$fp) {
-            die("Error: $errno - $errstr");
+            return "Connection Error: $errno - $errstr";
         }
 
-        // Login to Asterisk Manager Interface (AMI)
-        $login = "Action: Login\r\nUsername: {$this->username}\r\nSecret: {$this->password}\r\nEvents: off\r\n\r\n";
-        fwrite($fp, $login);
-        fread($fp, 1024);  // Read the response from AMI
+        // Login to Asterisk AMI
+        fwrite($fp, "Action: Login\r\nUsername: {$this->username}\r\nSecret: {$this->password}\r\nEvents: off\r\n\r\n");
+        fread($fp, 1024);
 
-        // Dial the number via the extension
+        // Dial the number using the defined extension
         $originate = "Action: Originate\r\n";
-        $originate .= "Channel: PJSIP/{$this->extension}\r\n";
+        $originate .= "Channel: SIP/{$this->extension}\r\n";
         $originate .= "Context: from-internal\r\n";
         $originate .= "Exten: {$number}\r\n";
         $originate .= "Priority: 1\r\n";
@@ -43,11 +38,11 @@ class Click2Call {
         fwrite($fp, "Action: Logoff\r\n\r\n");
         fclose($fp);
 
-        echo "Call to $number initiated successfully!";
+        return "Call to $number initiated successfully!";
     }
 
     private function validateNumber($number) {
-        return preg_match('/^\d{3,15}$/', $number);  // Basic validation for numbers (3-15 digits)
+        return preg_match('/^\d{3,15}$/', $number);  // Allows 3-15 digit numbers
     }
 }
 
