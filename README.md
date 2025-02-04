@@ -1,6 +1,6 @@
 # FreePBX-Click2Call Module
 
-# Steps to Create the Module
+# Steps to Create the Click2call Module
 1.) Install FreePBX Developer Tools: Make sure you have the FreePBX development environment set up. If you don't, you can follow the FreePBX development documentation.
 
 2.) Create a Custom Module: You'll need to create a custom FreePBX module. This can be done by creating a folder in the /var/www/html/admin/modules/ directory. Let’s name the module click2call.
