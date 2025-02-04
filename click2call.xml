@@ -1,0 +1,9 @@
+<module>
+    <name>Click2Call</name>
+    <version>1.0.0</version>
+    <author>Your Name</author>
+    <description>Click an image to initiate a call to a specified number.</description>
+    <category>Custom</category>
+    <enabled>yes</enabled>
+    <adminfile>click2call.php</adminfile>
+</module>
